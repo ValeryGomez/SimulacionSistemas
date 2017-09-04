@@ -1,0 +1,60 @@
+\documentclass[a4paper]{article}
+
+%% Language and font encodings
+\usepackage[spanish]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Pr\'actica 4:Diagramas de Voronoi}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+	Para la siguiente práctica es 
+
+\end{abstract}
+
+\section{Introducci\'on}
+
+\section{Par\'ametros de Trabajo}
+
+
+
+\section{Modificaciones del código}
+
+
+
+\lstset{language=R, breaklines=true, basicstyle=\footnotesize}
+
+\begin{lstlisting}[frame=single]
+for(num in 1: (detectCores()-1)){
+registerDoParallel(makeCluster(num))
+.
+.
+.
+salida = paste("p3_t", num, ".png", sep="")
+png(salida)
+boxplot(ot, it, at)
+graphics.off()
+}
+\end{lstlisting}
+
+\section{Resultados}
+A continuación presentaremos los gráficos variando la cantidad de núcleos como se especifica de cada uno en el pie del gráfico.
+
+
+\subsection{Interpretación}
+
+
+
+\end{document}

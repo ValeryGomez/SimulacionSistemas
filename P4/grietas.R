@@ -1,23 +1,10 @@
-n <-  200
+library(ggplot2)
+va <- c(40,100,200)
+datos<-data.frame()
+for(val in 1:3){
+	alpha<-data.frame()
+n <- va[val]
 semillitas<-c(12,20,50,70,100)
-zona <- matrix(rep(0, n * n), nrow = n, ncol = n)
-x <- rep(0, k) # ocupamos almacenar las coordenadas x de las semillas
-y <- rep(0, k) # igual como las coordenadas y de las semillas
-for(l in 1:5){
-k <- semillitas[l]
-for (semilla in 1:k) {
-    while (TRUE) { # hasta que hallamos una posicion vacia para la semilla
-        fila <- sample(1:n, 1)
-        columna <- sample(1:n, 1)
-        if (zona[fila, columna] == 0) {
-            zona[fila, columna] = semilla
-            x[semilla] <- columna
-            y[semilla] <- fila
-            break
-        }
-    }
-}
- 
 celda <-  function(pos) {
     fila <- floor((pos - 1) / n) + 1
     columna <- ((pos - 1) %% n) + 1
@@ -38,18 +25,38 @@ celda <-  function(pos) {
         return(cercano)
     }
 }
- 
+
+for(l in 1:5){
+zona <- matrix(rep(0, n * n), nrow = n, ncol = n)
+k <- semillitas[l]
+x <- rep(0, k) # ocupamos almacenar las coordenadas x de las semillas
+y <- rep(0, k) # igual como las coordenadas y de las semillas
+dats=data.frame()
+for (semilla in 1:k) {
+    while (TRUE) { # hasta que hallamos una posicion vacia para la semilla
+        fila <- sample(1:n, 1)
+        columna <- sample(1:n, 1)
+        if (zona[fila, columna] == 0) {
+            zona[fila, columna] = semilla
+            x[semilla] <- columna
+            y[semilla] <- fila
+            break
+        }
+    }
+}
 suppressMessages(library(doParallel))
 registerDoParallel(makeCluster(detectCores() - 1))
 celdas <- foreach(p = 1:(n * n), .combine=c) %dopar% celda(p)
 stopImplicitCluster()
 voronoi <- matrix(celdas, nrow = n, ncol = n, byrow=TRUE)
 rotate <- function(x) t(apply(x, 2, rev))
-png("p4s.png")
+salida=paste(val,"p4s",semilla,".png",sep="")
+png(salida)
 par(mar = c(0,0,0,0))
 image(rotate(zona), col=rainbow(k+1), xaxt='n', yaxt='n')
 graphics.off()
-png("p4c.png")
+final=paste(val,"p4c",semilla,".png",sep="")
+png(final)
 par(mar = c(0,0,0,0))
 image(rotate(voronoi), col=rainbow(k+1), xaxt='n', yaxt='n')
 graphics.off()
@@ -142,12 +149,13 @@ propaga <- function(replica) {
         }
     }
     if (largo >= limite) {
-        png(paste("p4g_", replica, ".png", sep=""))
+        png(paste(semilla,"p4g_",val,"_", replica, ".png", sep=""))
         par(mar = c(0,0,0,0))
         image(rotate(grieta), col=rainbow(k+1), xaxt='n', yaxt='n')
         graphics.off()
     }
     return(largo)
+
 }
 #for (r in 1:10) { # para pruebas sin paralelismo
 #    propaga(r)
@@ -156,6 +164,26 @@ suppressMessages(library(doParallel))
 registerDoParallel(makeCluster(detectCores() - 1))
 tiempo<- system.time(largos <- foreach(r = 1:200, .combine=c) %dopar% propaga(r))
 stopImplicitCluster()
-summary(largos)
-print(tiempo)
+
+dats = cbind(largos, rep(n,200), rep(k,200))
+
+if(length(datos)==0){
+	datos=dats
+}else{
+	datos=rbind(datos,dats)
 }
+}
+summary(largos)
+#boxplot(largos)
+#print(tiempo)
+}
+datos=data.frame(datos)
+colnames(datos)= c("Largo","Dimensión", "Semilla")
+write.csv(datos,file="datos.csv")
+
+datos12= datos[which(datos$Dimensión==12),]
+png(paste("12.png",sep=""))
+boxplot(data=datos12,aes(x=factor(Semilla),y=Largo))+labs(x="Número de region",y="Largos")
+
+#boxplot(alpha)
+graphics.off()

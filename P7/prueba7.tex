@@ -1,0 +1,119 @@
+\documentclass[a4paper]{article}
+
+%% Language and font encodings
+\usepackage[spanish]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Práctica 7: búsqueda local}
+\begin{document}
+\maketitle
+
+\section{Introducci\'on}
+La parte primordial de la tarea consiste en maximizar la función \textit{g(x,y)}, y ajustar el código previamente otorgado utilizando la misma lógica que en el ejemplo unidimensional.
+
+El Reto uno consiste en mostrar de algún modo el modo que se lleva a cabo la búsqueda local, es decir ejemplificar de modo gráfico como avanzan los puntos a través de las iteraciónes. El reto dos es modificar el código de tal modo que la búsqueda local se convierta en un recocido simulado, es decir que acepte moverse la solución a valores peores con el fin de intentar salir de algún máximo local.
+
+
+\section{Par\'ametros de trabajo}
+La experimentación se realizó en una MacBook Pro la cual cuenta con cuatro núcleos disponibles, se establecieron los parámetros de tal modo que se obtuvieran cuatro vecinos para la búsqueda local, se decidió plasmar los puntos en un plano \textit{(x, y)} para que la apreciación de los puntos fuera de forma adecuada y el paso que se le permitía a los agentes moverse se fijó en $0.25$.
+
+
+\section{Modificaciones del código}
+De el código original se  re formuló el modo de evaluación de la función que realiza las réplicas, ya que solo estaba adecuada para una función unidimensional, así como la forma de evaluar directo en la función g. Se conservaron los parámetros establecidos en el código original como lo son los valores en los cuales se va a mover la función y la cantidad de puntos se fijó en cien. La cantidad de réplicas se dejó fijo en tres valores distintos $10^2,10^3,10^4$. 
+
+
+\begin{lstlisting}[frame=single]
+replica <- function(t) {
+curr <- c(runif(1, low, high),runif(1, low, high))
+best <- curr
+for (tiempo in 1:t) {
+delta <- runif(1, 0, step)
+pnts<- c(curr[1]+delta,curr[2],curr[1]-delta,curr[2],
+curr[1],curr[2]+delta,curr[1] ,curr[2] -delta,curr[1],curr[2])
+valores <- c(g(pnts[1],pnts[2]),g(pnts[3],pnts[4]),g(pnts[5],pnts[6]),
+g(pnts[7],pnts[8]),g(curr[1], curr[2]))
+v <- which.max(valores)
+curr<- c(pnts[(v*2)-1],pnts[v*2])
+if (g(curr[1],curr[2]) > g(best[1],best[2])) {
+best <- curr
+}
+}
+return(best)
+} 
+\end{lstlisting}
+
+
+\section{Resultados}
+Se optó por conservar la cantidad de réplicas que se realizaban y de ese modo se obtuvieron las 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\linewidth]{imagenes/pnt7_100}
+\caption[Prueba con 100 réplicas.]{Prueba con 100 réplicas.}
+\label{fig:pnt7_100}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\linewidth]{imagenes/pnt7_1000}
+\caption{Prueba con 1000 réplicas.}
+\label{fig:pnt7_1000}
+\end{figure}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\linewidth]{imagenes/pnt7_10000}
+\caption{Prueba con 10000 réplicas.}
+\label{fig:pnt7_10000}
+\end{figure}
+
+
+\subsection{Interpretación}
+Podemos observar que si aumentamos la cantidad de pasos que la prueba realiza, es decir si dejas que la búsqueda local aumente la cantidad de iteraciones que se mueve, los puntos van avanzando a donde se esperaría, en nuestro caso a las zonas de color rosa. 
+
+ 
+\section{Reto 1}
+Para el reto uno se realizó un GIF con el fin que se pudiera apreciar de una manera más clara lo que ocurre en una iteración de búsqueda local, de igual modo se incluyen la figura 4 y figura 5 con el fin de ilustrar que es la misma función y solo se habla de una búsqueda local la que se ejemplificará.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\linewidth]{poo7_3}
+\caption{Paso número 4}
+\label{fig:poo7_3}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\linewidth]{poo7_42}
+\caption{Paso número 47}
+\label{fig:poo7_42}
+\end{figure}
+ 
+ Dado que los pasos son en teoría largos se puede apreciar un poco el cambio de punto en la búsqueda.
+
+
+\section{Reto 2}
+El reto dos consiste en cambiar la búsqueda local por un recocido simulado, así como poder definir que parámetros serán los adecuados para la realización del recocido respecto a temperatura inicial y tamaño del paso de enfriamiento. para eso se realizaron varias pruebas de las cuales se llegó a la conclución que los parámetros adecuados para la búsqueda sería una temperatura inicial de 200 así como una multiplicación de la temperatura por un$ \alpha = .99 $.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\linewidth]{tiempo_2_087.png}
+\caption{Iteraciónes respecto al valor de la función g.}
+\label{fig:tiempo_2_0}
+\end{figure}
+
+En la figura 6 podemos observar la disminución de la temperatura con la cual se decidió el parámetro a mejor considerar para el recocido simulado.
+
+
+\end{document}

@@ -1,0 +1,63 @@
+\documentclass[a4paper]{article}
+
+%% Language and font encodings
+\usepackage[spanish]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Práctica 8: modelo de urnas}
+\begin{document}
+\maketitle
+
+\section{Introducci\'on}
+La siguiente práctica consiste en paralelizar el código original de la práctica
+
+\section{Par\'ametros de trabajo}
+
+
+\section{Modificaciones del código}
+
+\begin{lstlisting}[frame=single]
+replica <- function(t) {
+curr <- c(runif(1, low, high),runif(1, low, high))
+best <- curr
+for (tiempo in 1:t) {
+delta <- runif(1, 0, step)
+pnts<- c(curr[1]+delta,curr[2],curr[1]-delta,curr[2],
+curr[1],curr[2]+delta,curr[1] ,curr[2] -delta,curr[1],curr[2])
+valores <- c(g(pnts[1],pnts[2]),g(pnts[3],pnts[4]),g(pnts[5],pnts[6]),
+g(pnts[7],pnts[8]),g(curr[1], curr[2]))
+v <- which.max(valores)
+curr<- c(pnts[(v*2)-1],pnts[v*2])
+if (g(curr[1],curr[2]) > g(best[1],best[2])) {
+best <- curr
+}
+}
+return(best)
+} 
+\end{lstlisting}
+
+
+\section{Resultados}
+
+\subsection{Interpretación}
+
+ 
+\section{Reto 1}
+
+
+\section{Reto 2}
+
+
+\end{document}

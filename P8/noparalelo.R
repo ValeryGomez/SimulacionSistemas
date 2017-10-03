@@ -115,12 +115,6 @@ for (paso in 1:duracion) {
   while (nchar(tl) < digitos) {
     tl <- paste("0", tl, sep="")
   }
-  #png(paste("p8_ct", tl, ".png", sep=""), width=300, height=300)
-  #tope <- 50 * ceiling(max(cumulos) / 50)
-  #hist(cumulos, breaks=seq(0, tope, 50), 
-  #     main=paste("Paso", paso, "con ambos fen\u{00f3}menos"), freq=FALSE,
-  #     ylim=c(0, 0.05), xlab="Tama\u{00f1}o", ylab="Frecuencia relativa")
-  #graphics.off()
   b <- Sys.time()
   ti <- c(a,b)
   tie <- diff(ti,units="secs")
@@ -133,5 +127,5 @@ tiempsec <-cbind(tiempsec,tipos)
 colnames(tiempsec) <- c("k","Tiempos","Tipo")
 write.csv(tiempsec,file="Stiempos.csv")
 png(paste("noparalelo.png", sep=""), width=300, height=300)
-boxplot(tiempsec$STiempos~tiempsec$Sk)
+boxplot(tiempsec$Tiempos~tiempsec$k)
 graphics.off()

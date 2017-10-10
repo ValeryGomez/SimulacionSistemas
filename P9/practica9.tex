@@ -38,16 +38,16 @@ tiemx <- c()
 tiemy <- c()
 \end{lstlisting}
 
-Así mismo se crearon los vectores \texttt{tiemx} y \texttt{tiemy} con el fin de utilizarlos más adelante para salvar las posiciones de las partículas, los cuales son empleados en la paralelización como se muestra. De igual forma para calcular las distancias de los movimientos se incluye la variable distancia, la cual por el modo en el que están guardados los datos te ayuda para el cálculo. Se llegó a la conclusión que no era necesario hacer el ciclo de distancia como una función propiamente ni paralelizarlo, ya que el programa tardaba más tiempo en ejecutarse.
+Así mismo se crearon los vectores \texttt{tiemx} y \texttt{tiemy} con el fin de utilizarlos más adelante para salvar las posiciones de las partículas, los cuales son empleados en la paralelización como se muestra. De igual forma para calcular las distancias de los movimientos se incluye la variable distancia, la cual por el modo en el que están guardados los datos te ayuda para el cálculo. Se llegó a la conclusión que no era necesario hacer el ciclo de distancia como una función propiamente ni paralelizarlo, ya que el programa tardaba más tiempo en ejecutarse. Así mismo se muestra la forma que afecta al \texttt{delta} el peso de la partícula.
 
 \begin{lstlisting}[frame=single]
 for (iter in 1:tmax) {
 ...
  p$x <- foreach(i = 1:n, .combine=c) %dopar% max(min(p[i,]$x + 
- (delta) * f[c(TRUE, FALSE)][i], 1), 0)
+ (delta/p[i,]$m) * f[c(TRUE, FALSE)][i], 1), 0)
  tiemx <- c(tiemx,p$x)
  p$y <- foreach(i = 1:n, .combine=c) %dopar% max(min(p[i,]$y + 
- (delta) * f[c(FALSE, TRUE)][i], 1), 0)
+ (delta/p[i,]$m) * f[c(FALSE, TRUE)][i], 1), 0)
  tiemy <- c(tiemy,p$y)
 ...
 }
@@ -57,7 +57,7 @@ distancia <- c(distancia, ((tiemx[i]-tiemx[i+50])^2 +
 (tiemy[i]-tiemy[i+50])^2)^(1/2))
 }
 \end{lstlisting}
-Para graficar adecuadamente los datos por tamaño de partícula como lo pide el reto uno fue necesario crear otro \texttt{data.frame} con el fin de generar una gráfica tipo \texttt{boxplot} que representara los tiempos respecto a la masa, como se muestra en la ()()()() así como grabar los datos en un archivo tipo \texttt{.csv} con el fin de no perder los datos y poder usarlos en futuro.
+Para generar el gráfico adecuado de los datos por tamaño de partícula como lo pide el reto uno fue necesario crear otro \texttt{data.frame} con el fin de generar una gráfica tipo \texttt{boxplot} que representara los tiempos respecto a la masa, como se muestra en la figura \ref{fig:totaloriginal} así como grabar los datos en un archivo tipo \texttt{.csv} con el fin de no perder los datos y poder usarlos en futuro.
 
 \begin{lstlisting}[frame=single]
 total <- data.frame(iteraciones,distancia,masa)
@@ -86,7 +86,7 @@ La última modificación que se realizó fue la generación de los grafos respet
 \end{lstlisting}
 
 \section{Resultados}
-La \ref*{fig:totaloriginal} nos muestra la práctica original.
+La figura \ref*{fig:totaloriginal} nos muestra la práctica original y es un poco de esperar la relación que muestran las distancias respecto a las cargas, mientras es más fuerte la carga que posee la partícula es más el desplazamineto que se realiza en ella.
 
 \begin{figure}[h!]
 \centering
@@ -95,7 +95,16 @@ La \ref*{fig:totaloriginal} nos muestra la práctica original.
 \label{fig:totaloriginal}
 \end{figure}
 
+En cambio observemos la figura \ref{fig:totalR}, en ella podemos observar de igual forma el tiempo pero ahora respecto a la cantidad de masa, la cual como ya mencionamos esta relacionada de cierta forma a la cantidad de carga proporcionada a ella. En la imagen podemos observar que mientras mayor es la masa del objeto, menor es su movimiento, en las partículas pequeñas los movimientos son sumamente grandes y conformo aumenta la masa se puede observar que los movimientos son mucho más pequeños.
 
-\section{Conclusiones}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\linewidth]{total}
+\caption{Distancias recorridas respecto a su cantidad de masa.}
+\label{fig:totalR}
+\end{figure}
+
+\section{Comentarios}
+
 
 \end{document}

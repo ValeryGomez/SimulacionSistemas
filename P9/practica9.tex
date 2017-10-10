@@ -17,7 +17,7 @@
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 
-\title{Práctica 9: iteracciones entre partículas}
+\title{Práctica 9: interacciones entre partículas}
 \begin{document}
 \maketitle
 
@@ -71,7 +71,7 @@ graphics.off()
 
 write.csv(total,file="TotalReto.csv")
 \end{lstlisting}
-La última modificación que se realizó fue la generación de los grafos respetando el tamaño de la partícula es decir respecto a la masa asignada, a continuación solo se muestra la instrucción para generarla de una sola posición de partículas y de forma similar son las instrucciones para el resto de las imágenes.
+La última modificación que se realizó fue la generación de los grafos respetando el tamaño de la partícula es decir respecto a la masa asignada, a continuación solo se muestra la instrucción para generarla de una sola posición de partículas, así como la figura \ref{fig:p9i} muestra los diferentes radios de las partículas y de forma similar son las instrucciones para el resto de las imágenes.
 
 \begin{lstlisting}[frame=single]
   png("p9radios.png")
@@ -84,6 +84,14 @@ La última modificación que se realizó fue la generación de los grafos respet
   scale_size_continuous(breaks=seq(0,0.1,0.01),labels=seq(0,0.1,0.01))
   graphics.off()
 \end{lstlisting}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{p9i}
+\caption{Partículas con masa y radio.}
+\label{fig:p9i}
+\end{figure}
+
 
 \section{Resultados}
 La figura \ref*{fig:totaloriginal} nos muestra la práctica original y es un poco de esperar la relación que muestran las distancias respecto a las cargas, mientras es más fuerte la carga que posee la partícula es más el desplazamineto que se realiza en ella.
@@ -105,6 +113,6 @@ En cambio observemos la figura \ref{fig:totalR}, en ella podemos observar de igu
 \end{figure}
 
 \section{Comentarios}
-
+Se incluyen tres GIF, el primero de ellos, \href{https://github.com/ValeryGomez/SimulacionSistemas/blob/master/P9/MasaIgual.gif}{MasaIgual} muestra el movimiento original de las partículas sin ninguna masa que los haga ir más rápido o menos. El segundo GIF que se incluye \href{https://github.com/ValeryGomez/SimulacionSistemas/blob/master/P9/Peso.gif}{Peso} se muestran las partículas con sus respectivos pesos pero aún sin visualización de su radio. Y el último GIF \href{https://github.com/ValeryGomez/SimulacionSistemas/blob/master/P9/Radios.gif}{Radio} las muestra ya con su respectivo radio, es decir en proporción al tamaño de su masa y su mismo movimiento.
 
 \end{document}

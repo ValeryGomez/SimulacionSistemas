@@ -3,22 +3,32 @@ noprob <- as.data.frame(read.csv("r1pfinal.csv"))
 prob <-as.data.frame(read.csv("r1probfinal.csv"))
 ambos<- data.frame()
 ambos<-rbind(noprob,prob)
-#colnames(ambos) <- c("Generación","Valor","Diferencia","Tipo")
-ambos$Población <- as.factor(ambos$Población)
-png(paste("ambosd.png", sep=""), width=700, height=700)
-ggplot(data=ambos,aes(x=Población,y=Diferencia,fill=Tipo))+geom_boxplot()#+ylab("Tiempos (s)")#stat_summary(fun.y=mean,geom="smooth",aes(group=Tipo,col=Tipo))
-#boxplot(pa$Tiempos~pa$k, color="red")
-graphics.off()
+colnames(ambos) <- c("X","Generacion","Valor","Diferencia","Tipo")
+ambos$Generacion <- as.factor(ambos$Generacion)
 
-####
-png(paste("noprob.png", sep=""), width=700, height=700)
-boxplot(noprob$X~noprob$Diferencia)
+png(paste("Reto1.png", sep=""), width=700, height=700)
+ggplot(data=ambos,aes(x=Generacion,y=Diferencia,fill=Tipo))+geom_boxplot() +xlab("Generaci\u{F3}n")+ylab("GAP")#stat_summary(fun.y=mean,geom="smooth",aes(group=Tipo,col=Tipo))
 graphics.off()
-####
-png(paste("prob.png", sep=""), width=700, height=700)
-prob$Población <- as.factor(prob$Población)
-ggplot(data=prob,aes(x=Población,y=Diferencia))+geom_boxplot()#+ylab("Tiempos (s)")#stat_summary(fun.y=mean,geom="smooth",aes(group=Tipo,col=Tipo))
+#????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+#Prueba Estad??stica
+shapiro.test(ambos$Diferencia)
+wilcox.test(ambos$Diferencia[ambos$Tipo=="Probabilidad"],ambos$Diferencia[ambos$Tipo=="Normal"] )
+median(ambos$Diferencia[ambos$Tipo=="Probabilidad"])
+median(ambos$Diferencia[ambos$Tipo=="Normal"])
 
-plot(prob$Población~prob$Diferencia)
-graphics.off()
-###
+
+#??????????Tendencia de Paralelizada??????????
+a <- as.data.frame(read.csv("r1p.csv"))
+b <-as.data.frame(read.csv("r1prob.csv"))
+#
+g_range <- range(0, a$Tipo, b$Diferencia)
+plot(b$Diferencia, type="o", col="blue", ylim=g_range, 
+     axes=FALSE, ann=FALSE)
+axis(1, at=1:70, lab=c(a$X))
+box()
+lines(a$Tipo, type="o", pch=22, lty=2, col="red")
+title(main="Autos", col.main="red", font.main=4)
+title(xlab="Generaci\u{F3}n", col.lab=rgb(0,0.5,0))
+title(ylab="GAP", col.lab=rgb(0,0.5,0))
+legend(1, g_range[2], c("Con Probabilidad","Normal"), cex=0.8, 
+       col=c("blue","red"), pch=21:22, lty=1:2);

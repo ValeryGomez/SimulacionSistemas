@@ -1,7 +1,8 @@
 tiemposno <- data.frame()
+repp <- 25
 naa <- c(50,100,200,300)
 for(la in 1:length(naa)){
-for(ia in 1:25){
+for(ia in 1:repp){
 a <- Sys.time()
 pick.one <- function(x) {
   if (length(x) == 1) {
@@ -85,11 +86,12 @@ for (i in 1:n) {
 b <- Sys.time()
 ti <- c(a,b)
 tie <- diff(ti,units="secs")
-tiemposno <- rbind(tiemposno,c(ia,n,tie))
+tiemposno <- rbind(tiemposno,c(ia,n,tie,porcentaje=dim(frente)[1]*100/n))
 }
 }
-colnames(tiemposno) <- c("Iteracion","Poblacion","Tiempo")
-
+tipo <- rep("Secuencial",length(naa)*repp)
+tiemposno <- cbind(tiemposno,tipo)
+colnames(tiemposno) <- c("Iteracion","Poblacion","Tiempo","Porcentaje","Tipo")
 write.csv(tiemposno, file="tiemposno.csv")
 
 frente <- subset(val, no.dom) # solamente las no dominadas

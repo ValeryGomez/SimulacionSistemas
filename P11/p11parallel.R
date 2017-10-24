@@ -1,6 +1,6 @@
-naa <- c(50,100,200,300)
+naa <- c(2,5,7,10)
 tiempos <- data.frame()
-repp<-25
+repe<-25
 for(la in 1:length(naa)){
 library(parallel)
 pick.one <- function(x) {
@@ -41,16 +41,15 @@ cluster <- makeCluster(detectCores() - 1)
 vc <- 4
 md <- 3
 tc <- 5
-k <- 2 
+k <- naa[la]
 obj <- list()
 for (i in 1:k) {
-  obj[[i]] <- poli(vc, md, tc)
+  obj[[i]] <- poli(md, vc, tc)
 }
 minim <- (runif(k) > 0.5)
 sign <- (1 + -2 * minim)
-n <- naa[la]
-for(bla in 1:repp){
-  a <- Sys.time()
+n <- 200
+for(bla in 1:repe){
   sol <- matrix(runif(vc * n), nrow=n, ncol=vc)
 ########
   valsol <- function(i){
@@ -96,7 +95,7 @@ for(bla in 1:repp){
   domfun <- function(i){
     d <- logical()
     for (j in 1:n) {
-      d <- c(d, domin.by(sign * val[i,], sign * val[j,], k))
+      d <- c(d, domin.by(sign*val[i,], sign*val[j,], k))
     }
     cuantos <- sum(d)
     dominadores <- c(dominadores, cuantos)
@@ -139,20 +138,12 @@ for(bla in 1:repp){
     ylab("Frecuencia") +
     ggtitle("Cantidad de soluciones dominantes")
   graphics.off()
-  #tp2<- Sys.time()
-  #tiempo.par <- tp2-tp1
-  #tiempos <- c(tiempos, tiempo.par)
-  b <- Sys.time()
-  ti <- c(a,b)
-  tie <- diff(ti,units="secs")
-  tiempos <- rbind(tiempos,c(bla,n,tie,porcentaje=dim(frente)[1]*100/n))
+  tiempos <- rbind(tiempos,c(bla,k,cuantos,porcentaje=(dim(frente)[1]*100/n)))
 }
 }
-tipo <- rep("Paralelo",length(naa)*repp)
-tiempos <- cbind(tiempos,tipo)
-colnames(tiempos) <- c("Iteracion","Poblacion","Tiempo","Porcentaje","Tipo")
-write.csv(tiempos,file="tiempos.csv")
-#write.csv(tiempos , file = "tiempoParalelo400.csv")
+
+colnames(tiempos) <- c("Iteracion","Funciones","Dominadores","Porcentaje")
+write.csv(tiempos,file="Porciento200.csv")
 stopCluster(cluster)
 
 frente <- subset(val, no.dom) # solamente las no dominadas

@@ -79,7 +79,6 @@ for (t in 1:entrena) { # entrenamiento
   }
 }
   for(re in 1:repeticiones){
-
     ciertos <- data.frame
     resu <- data.frame()
 
@@ -94,9 +93,8 @@ for (t in 1:entrena) { # entrenamiento
     resu <- parSapply(cluster, 1:300, fprueba)
 
     resu <- t(resu)
-    correcpor <- ((sum(resu[,2]) * 100)/entrena)
+    correcpor <- ((sum(resu[,2]) * 100)/300)
     tiempopar <- rbind(tiempopar,c(re,ent[e],correcpor))
-    
   }
 }
 stopCluster(cluster)

@@ -66,13 +66,10 @@ fprueba <- function(i){
     deseada <- correcto[i]
     resultado <- sum(w * pixeles) >= 0
     salida[i] <- resultado
-  if(correcto[i] != salida[i]){
-   # ciertos[d]<-ciertos[d]+1
-    return(c(d,0))
-  }
+  if(correcto[i] == salida[i]){
+    return(c(d,1))
+  }else{return(c(decimal(salida, n),1))}
     }
-  #  ciertos[d]<- ciertos[d]+0
-    return(c(decimal(salida, n),1))
 }
 cluster <- makeCluster(detectCores() - 1)
 tiempopar <- data.frame()

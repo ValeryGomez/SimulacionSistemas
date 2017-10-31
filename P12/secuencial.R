@@ -1,10 +1,7 @@
 tiempsec <- data.frame()
 ent <- c(300,500,700,1000)
 repeticiones <- 20
-for(e in 1:length(ent)){
-  for(re in 1:repeticiones){
-  aa <- Sys.time()
-entrena <- ent[e]
+
 binario <- function(d, l) {
   b <- rep(FALSE, l)
   while (l > 0 | d > 0) {
@@ -60,7 +57,10 @@ for (t in 1:5000) { # entrenamiento
     }
   }
 }
-
+for(e in 1:length(ent)){
+  for(re in 1:repeticiones){
+    aa <- Sys.time()
+    entrena <- ent[e]
 for (t in 1:entrena) { # prueba
   d <- sample(0:tope, 1)
   pixeles <- runif(dim) < modelos[d + 1,] # fila 1 contiene el cero, etc.

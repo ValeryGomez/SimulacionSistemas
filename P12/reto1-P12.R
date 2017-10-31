@@ -18,10 +18,26 @@ decimal <- function(bits, l) {
   return(valor)
 }
 
+fprueba <- function(i){
+  d <- sample(0:tope, 1)
+  pixeles <- runif(dim) < modelos[d + 1,] # fila 1 contiene el cero, etc.
+  correcto <- binario(d, n)
+  salida <- rep(FALSE, n)
+  for (i in 1:n) {
+    w <- neuronas[i,]
+    deseada <- correcto[i]
+    resultado <- sum(w * pixeles) >= 0
+    salida[i] <- resultado
+    if(correcto[i] == salida[i]){
+      return(c(d,1))
+    }else{return(c(decimal(salida, n),0))}
+  }
+}
+
 modelos <- read.csv("digitos.modelo.csv", sep=" ", header=FALSE, stringsAsFactors=F)
-modelos[modelos=='n'] <- 0.995
-modelos[modelos=='g'] <- 0.92
-modelos[modelos=='b'] <- 0.002
+mn <- c(.995,.9,.995,.9,.002,.0003)
+mg <- c(.92,.825,.995,.9,.002,.0002)
+mb <- c(.002,.093,.995,.9,.002,.0003)
 
 r <- 5
 c <- 3
@@ -40,6 +56,17 @@ colnames(contadores) <- c(0:tope, NA)
 n <- floor(log(k-1, 2)) + 1
 neuronas <- matrix(runif(n * dim), nrow=n, ncol=dim) # perceptrones
 
+cluster <- makeCluster(detectCores() - 1)
+tiempopar <- data.frame()
+ent <- c(300,500,700,1000)
+repeticiones <- 20
+for(vg in 1:length(mn)){
+###
+    modelos[modelos=='n'] <- mn[vg]
+    modelos[modelos=='g'] <- mg[vg]
+    modelos[modelos=='b'] <- mb[vg]
+###
+
 for (t in 1:5000) { # entrenamiento
   d <- sample(0:tope, 1)
   pixeles <- runif(dim) < modelos[d + 1,]
@@ -56,36 +83,11 @@ for (t in 1:5000) { # entrenamiento
   }
 }
 
-fprueba <- function(i){
-  d <- sample(0:tope, 1)
-  pixeles <- runif(dim) < modelos[d + 1,] # fila 1 contiene el cero, etc.
-  correcto <- binario(d, n)
-  salida <- rep(FALSE, n)
-  for (i in 1:n) {
-    w <- neuronas[i,]
-    deseada <- correcto[i]
-    resultado <- sum(w * pixeles) >= 0
-    salida[i] <- resultado
-    if(correcto[i] != salida[i]){
-      # ciertos[d]<-ciertos[d]+1
-      return(c(d,0))
-    }
-  }
-  #  ciertos[d]<- ciertos[d]+0
-  return(c(decimal(salida, n),1))
-}
-cluster <- makeCluster(detectCores() - 1)
-tiempopar <- data.frame()
-ent <- c(300,500,700,1000)
-repeticiones <- 20
 for(e in 1:length(ent)){
   for(re in 1:repeticiones){
-    #  e<-1 
-    #  re <- 1
+    correcpor <- c()
     ciertos <- data.frame
     resu <- data.frame()
-    
-    aa <- Sys.time()
     entrena <- ent[e]
     clusterExport(cluster, "fprueba")
     clusterExport(cluster, "modelos")
@@ -95,22 +97,16 @@ for(e in 1:length(ent)){
     clusterExport(cluster, "tope")
     clusterExport(cluster, "dim")
     clusterExport(cluster, c("n","ciertos"))
-    # resu <- parSapplyLB(cluster,1:300,fprueba)
     resu <- parSapply(cluster, 1:entrena, fprueba)
-    bb <- Sys.time()
-    ti <- c(aa,bb)
-    tie <- diff(ti,units="secs")
     resu <- t(resu)
-    #correcpor <- ((sum(resu[,2]) * 100)/entrena)
-    tiempopar <- rbind(tiempopar,c(re,ent[e],tie))#,correcpor))
-    
+    correcpor <- ((sum(resu[,2]) * 100)/entrena)
+    tiempopar <- rbind(tiempopar,c(re,ent[e],correcpor,vg))
   }
+}
 }
 
 stopCluster(cluster)
-tipos <- rep("Paralelo",repeticiones*length(ent))
-tiempopar <- cbind(tiempopar,tipos)
-colnames(tiempopar)= c("Repeticion","Cantidad","Tiempo","Tipo")
+colnames(tiempopar)= c("Repeticion","Cantidad","Porcentaje","Combinacion")
 
 #print(contadores)
-write.csv(tiempopar, file="TiempPar.csv")
+write.csv(tiempopar, file="PorcentParIgual.csv")

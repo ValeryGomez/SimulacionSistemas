@@ -40,21 +40,6 @@ colnames(contadores) <- c(0:tope, NA)
 n <- floor(log(k-1, 2)) + 1
 neuronas <- matrix(runif(n * dim), nrow=n, ncol=dim) # perceptrones
 
-for (t in 1:50000) { # entrenamiento
-  d <- sample(0:tope, 1)
-  pixeles <- runif(dim) < modelos[d + 1,]
-  correcto <- binario(d, n)
-  for (i in 1:n) {
-    w <- neuronas[i,]
-    deseada <- correcto[i]
-    resultado <- sum(w * pixeles) >= 0
-    if (deseada != resultado) {
-      ajuste <- tasa * (deseada - resultado)
-      tasa <- tranqui * tasa
-      neuronas[i,] <- w + ajuste * pixeles
-    }
-  }
-}
 
 fprueba <- function(i){
   d <- sample(0:tope, 1)
@@ -74,16 +59,30 @@ fprueba <- function(i){
 }
 cluster <- makeCluster(detectCores() - 1)
 tiempopar <- data.frame()
-ent <- c(700)
+ent <- c(5000,7000,15000,30000,50000)
 repeticiones <- 20
 for(e in 1:length(ent)){
+  entrena <- ent[e]
+for (t in 1:entrena) { # entrenamiento
+  d <- sample(0:tope, 1)
+  pixeles <- runif(dim) < modelos[d + 1,]
+  correcto <- binario(d, n)
+  for (i in 1:n) {
+    w <- neuronas[i,]
+    deseada <- correcto[i]
+    resultado <- sum(w * pixeles) >= 0
+    if (deseada != resultado) {
+      ajuste <- tasa * (deseada - resultado)
+      tasa <- tranqui * tasa
+      neuronas[i,] <- w + ajuste * pixeles
+    }
+  }
+}
   for(re in 1:repeticiones){
-    #  e<-1 
-    #  re <- 1
+
     ciertos <- data.frame
     resu <- data.frame()
 
-    entrena <- ent[e]
     clusterExport(cluster, "fprueba")
     clusterExport(cluster, "modelos")
     clusterExport(cluster, "binario")
@@ -92,8 +91,7 @@ for(e in 1:length(ent)){
     clusterExport(cluster, "tope")
     clusterExport(cluster, "dim")
     clusterExport(cluster, c("n","ciertos"))
-    # resu <- parSapplyLB(cluster,1:300,fprueba)
-    resu <- parSapply(cluster, 1:entrena, fprueba)
+    resu <- parSapply(cluster, 1:300, fprueba)
 
     resu <- t(resu)
     correcpor <- ((sum(resu[,2]) * 100)/entrena)

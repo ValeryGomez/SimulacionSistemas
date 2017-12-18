@@ -98,4 +98,4 @@ if (eucl) {
   ggplot(data=graficas,aes(x=Dimension,y=Tiempo,fill=Pasos))+geom_boxplot()+xlab("Dimensi\u{F3}n (100 Rep)")+ ylab("Tiempo de ejecuci\u{F3}n (s)")
   graphics.off()
 }
-write.csv(graficas,file = "datosTiemposPar.csv")
+write.csv(graficas,file = "datosTiemposNoPar.csv")

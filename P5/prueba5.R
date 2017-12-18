@@ -9,7 +9,7 @@ names(DT) = c("n", "e")
 names(DE) = c("n", "e")
 
 
-rep <- 20
+rep <- 5
 known = 0.0488341111
 error <-function(x){return(abs(x-known))}
 f <- function(x) { return(1 / (exp(x) + exp(-x))) }
@@ -52,41 +52,23 @@ for(p in seq(10, 20, 2)){
   names(DE) = c("n", "e")
 }
 stopCluster(cluster)
-ap <-t(D[ ,2:21])
-ti <-t(DT[ , 2:21])
-er <-t(DE[ , 2:21])
+ap <-t(D[ ,2:rep+1])
+ti <-t(DT[ , 2:rep+1])
+er <-t(DE[ , 2:rep+1])
 
 png("aprox.png")
-boxplot(ap,names= c("2^10", "2^12", "2^14", "2^16", "2^18", "2^20", "2^22", "2^24", "2^26", "2^28", "2^30"))
+boxplot(ap,names= c(expression(2^10), expression(2^12), expression(2^14), expression(2^16), expression(2^18), expression(2^20)))
 abline(h=0.0488341111) 
 graphics.off()
 
 png("tiempos.png")
-boxplot(ti,names= c("2^10", "2^12", "2^14", "2^16", "2^18", "2^20", "2^22", "2^24", "2^26", "2^28", "2^30"))
+boxplot(ti,names= c(expression(2^10), expression(2^12), expression(2^14), expression(2^16), expression(2^18), expression(2^20)))
 graphics.off()
 
 png("error.png")
-boxplot(er,names= c("2^10", "2^12", "2^14", "2^16", "2^18", "2^20", "2^22", "2^24", "2^26", "2^28", "2^30"))
+boxplot(er,names= c(expression(2^10), expression(2^12), expression(2^14), expression(2^16), expression(2^18), expression(2^20)))
 graphics.off()
 
-
-
-#png("aprox.png", width = 1000, height = 1000)
-#boxplot(as.numeric(D[1,2:21]), as.numeric(D[2,2:21]), 
-#        as.numeric(D[3,2:21]), as.numeric(D[4,2:21]), 
-#        as.numeric(D[5,2:21]), as.numeric(D[6,2:21]),
-#        as.numeric(D[7,2:21]), as.numeric(D[8,2:21]), 
-#        as.numeric(D[9,2:21]), as.numeric(D[10,2:21]), 
-#        as.numeric(D[11,2:21]),
-#        names=c("2^10", "2^12", "2^14", "2^16", "2^18", "2^20", "2^22", "2^24", "2^26", "2^28", "2^30"))
-#graphics.off()
-#png("tiempo.png")
-#boxplot(as.numeric(DT[1,2:21]), as.numeric(DT[2,2:21]), 
-#        as.numeric(DT[3,2:21]), as.numeric(DT[4,2:21]), 
-#        as.numeric(DT[5,2:21]), as.numeric(DT[6,2:21]),
-#        as.numeric(DT[7,2:21]), as.numeric(DT[8,2:21]), 
-#        as.numeric(DT[9,2:21]), as.numeric(DT[10,2:21]), 
-#        as.numeric(DT[11,2:21]),
-#        names=c("2^10", "2^12", "2^14", "2^16", "2^18", "2^20", "2^22", "2^24", "2^26", "2^28", "2^30"),
-#        ylim=c(0,.01))
-#graphics.off()
+write.csv(ap,file="datos.csv")
+write.csv(ti,file="tiempos.csv")
+write.csv(er,file="error.csv")

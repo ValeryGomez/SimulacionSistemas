@@ -1,4 +1,4 @@
-repetir <- 100
+repetir <- 300
 dd <- c(50,80,150,200,400)
 eucl <- TRUE
 dimm <- 8
@@ -62,26 +62,19 @@ for(i in 1:(dimm*length(dd))){
     porcientos <- c(porcientos, porcentaje)
 }
 colnames(graficas)= c("Pasos","Dimension", "Valor M", "Origen")
-#graficas <- t(graficas)
 graficas$Pasos <- as.factor(graficas$Pasos)
 graficas$Dimension <- as.factor(graficas$Dimension)
 
 if (eucl) {
-#  png("p1er.png")
-#  boxplot(data.matrix(graficas), use.cols=FALSE, 
-#          xlab="Dimensi\u{F3}n", ylab="Distancia m\u{E1}xima", 
-#          main="Euclideana")
-  png(paste("PorcentajesEu.png", sep=""), width=700, height=700)
-  ggplot(data=graficas,aes(x=Dimension,y=Origen,fill=Pasos))+geom_boxplot()+xlab("Dimensi\u{F3}n (100 Rep)")+ ylab("Cantidad de llegadas al Origen")
+  png(paste("PorcentajesEu300.png", sep=""), width=700, height=700)
+  ggplot(data=graficas,aes(x=Dimension,y=Origen,fill=Pasos))+geom_boxplot()+xlab("Dimensi\u{F3}n (300 Rep)")+ ylab("Cantidad de llegadas al Origen")
   graphics.off()
+  write.csv(graficas,file = "datos300.csv")
 } else {
-#  png("p1mr.png")
-#  boxplot(data.matrix(graficas), use.cols=FALSE, 
-#          xlab="Dimensi\u{F3}n", ylab="Distancia m\u{E1}xima", 
-#          main="Manhattan")
-  png(paste("PorcentajesMa.png", sep=""), width=700, height=700)
+  png(paste("PorcentajesMa300.png", sep=""), width=700, height=700)
   ggplot(data=graficas,aes(x=Dimension,y=Origen,fill=Pasos))+geom_boxplot()+xlab("Dimensi\u{F3}n (100 Rep)")+ ylab("Cantidad de llegadas al Origen")
   graphics.off()
+  write.csv(graficas,file = "datos300.csv")
 }
 v <- 0
 porcentaje <- data.frame()
@@ -91,13 +84,11 @@ for(vi in 1:length(dd)){
 }
 colnames(porcentaje)= seq(1:8)
 row.names(porcentaje)= dd
-#porcentaje <- t(porcentaje)
-#ggplot(data=porcentaje,aes(x=Dimension,y=Origen,fill=Pasos))+geom_boxplot()+xlab("Dimensi\u{F3}n (100 Rep)")+ ylab("Cantidad de llegadas al Origen")
-png(paste("PorcMa.png", sep=""), width=700, height=700)
-plot(porcentaje[1,], type = "l", col="purple")
-for(la in 2:length(dd)){
-  lines(porcentaje[la,], type = "l", col=sample(rainbow(10)))
-}
-graphics.off()
+#png(paste("PorcMa.png", sep=""), width=700, height=700)
+#plot(porcentaje[1,], col="purple", type="d")
+#for(la in 2:length(dd)){
+#  lines(porcentaje[la,], type = "l", col=sample(rainbow(10)))
+#}
+#graphics.off()
 
 

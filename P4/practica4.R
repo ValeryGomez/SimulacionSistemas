@@ -1,3 +1,5 @@
+library('ggplot2')
+
 datos <- data.frame()
 va <- c(40,100,200)
 semillitas<-c(12,20,50,70,100)
@@ -176,3 +178,26 @@ datos <- rbind(datos,dato)
 }
 stopImplicitCluster()
 summary(largos)
+colnames(datos) <- c("Malla","Semillas","Largos")
+datos$Semillas <- as.factor(datos$Semillas)
+datos$Malla <- as.factor(datos$Malla)
+
+png(paste("DistanciasM.png", sep=""), width=700, height=700)
+ggplot(data=datos,aes(x=Malla,y=Largos, fill= Semillas))+geom_boxplot()+xlab("Largo del mallado")+ ylab("Largo de la grieta")
+graphics.off()
+
+png(paste("DistanciasS.png", sep=""), width=700, height=700)
+ggplot(data=datos,aes(x=Semillas,y=Largos, fill= Malla))+geom_boxplot()+xlab("Semillas en la Malla")+ ylab("Largo de la grieta")
+graphics.off()
+
+png(paste("DistanciasMJuntas.png", sep=""), width=700, height=700)
+ggplot(data=datos,aes(x=Malla,y=Largos))+geom_boxplot()+xlab("Largo del mallado")+ ylab("Largo de la grieta")
+graphics.off()
+png(paste("DistanciasSJuntas.png", sep=""), width=700, height=700)
+ggplot(data=datos,aes(x=Semillas,y=Largos))+geom_boxplot()+xlab("Semilas en la malla")+ ylab("Largo de la grieta")
+graphics.off()
+#Prueba Estadística
+datos$Malla<- as.numeric(datos$Malla)
+shapiro.test(datos$as.numeric(Malla))
+wilcox.test(datos$Malla[datos$Semillas=="40"],datos$Malla[datos$Semillas=="Normal"] )
+median(datos$Malla[datos$Semillas]

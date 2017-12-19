@@ -32,9 +32,10 @@ La experiemtnación se realizó en un HP Z230 Tower Workstation con procesador I
 Se tiene una rejilla de $n\times n$,  $n \in \{40, 100, 200\} $ y se esparcen $k \in \{12,20,50,70,100\}$ semillas, se toma la misma medida para conciderar a una grieta como tal, que el número de pasos que da, es decir su largo sea suprior o igual a la dimensión $n$, considerandola así lo suficiente mente larga para su observación
 
 \section{Modificaciones del código}
-Se incluyeron unicamente dos ciclos \texttt{for} para la automatización de las medias, uno encargado de variar la cantidad de semillas en la malla y el otro encargado de variar la medida de ella. Así mismo se incluyeron dos vectores con el fin de almacenar los valores que toman $k$ y $n$.
+Se incluyeron unicamente dos ciclos \texttt{for} para la automatización de las medias, uno encargado de variar la cantidad de semillas en la malla y el otro encargado de variar la medida de ella. Así mismo se incluyeron dos vectores con el fin de almacenar los valores que toman $k$ y $n$. Así como se agregó la librería \texttt{ggplot} para las gráficas a generar.
 
 \begin{lstlisting}[frame=single]
+library('ggplot2')
 va <- c(40,100,200)
 semillitas<-c(12,20,50,70,100)
 for( a in 1:length(va)){
@@ -53,23 +54,22 @@ datos <- rbind(datos,dato)
 \end{lstlisting}
 
 \section{Resultados y conclusiones}
-Los largos de las grietas para las combinaciones de parámetros los podemos ver con mayor claridad en la figura 
+Los largos de las grietas para las combinaciones de parámetros los podemos ver con mayor claridad en la figura \ref{fig:DistanciasM} podemos observar que hay una ligera variación respecto a la malla de $40 \times 40$, en cambio, la diferencia no es tan notoria con la figura \ref{fig:DistanciasS} donde la cantidad de semillas no parece importar respecto a lo largo de las grietas.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{DistanciasM}
+\caption{Largo de las grietas respecto a la dimensión de la malla.}
+\label{fig:DistanciasM}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{DistanciasS}
+\caption{Largo de las grietas respecto a la cantidad de semillas que se utilizan.}
+\label{fig:DistanciasS}
+\end{figure}
+
+Se realizaron pruebas de medias en ambos casos con el fin de determinar si efectivamente la dimensión del mallado tenía un efecto significativo, así mismo con la cantidad de semillas, y efectivamente se llega a la conclusión que el mallado afecta, al ser más pequeño la longitud de las grietas es mayos, en cambio no difiere mucho respecto a la cantidad de semillas puesta en él.
 
 
-\section{Reto 1}
-
-
-\section{Modificación del código y parámetros de R1}
-
-
-
-\section{Resultados y conclusiones de R1}
-
-\section{Reto 2}
-
-
-\section{Modificación de código y parámetros R2}
-
-\section{Resultados y conclusiones de R2}
 
 \end{document}

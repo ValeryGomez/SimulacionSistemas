@@ -24,11 +24,11 @@
 \maketitle
 
 \section{Introducci\'on}
-En esta práctica se observa el movimiento que realiza una partícula a travez de diferentes planos de movimiento, dicho movimiento lo realiza con una aleatoriedad, lo cual se conoce como movimiento Browniano, la intención será en primer momento conocer la probabilidad con la cual la partícula regresará a su punto de salida, tomando éste como el origen, así mismo los retos adicionales nos ayudarán a contabilizar los tiempos que tarda el programa en realizar una caminata, así como los tiempos que tardaría si no tuviéramos una versión paralela, intentando visualizar la ventaja o desventaja que la paralelización representa en esta práctica.
+En esta práctica se observa el movimiento que realiza una partícula a travez de diferentes planos de movimiento, dicho movimiento lo realiza con una aleatoriedad, lo cual se conoce como movimiento Browniano, la intención será en primer momento conocer la probabilidad con la cual la partícula regresará a su punto de salida, tomando éste como el origen, así mismo los retos adicionales nos ayudarán a contabilizar los tiempos que tarda el programa en realizar una caminata, así como los tiempos que tardaría si no tuviéramos una versión paralela, intentando visualizar la ventaja o desventaja que la paralelización representa en esta práctica, todas las experimentaciónes se llevarán a cabo comparando dos formas de medición de distancias, la forma Euclideana y la conocida como Manhattan.
 \section{Par\'ametros de trabajo}
 La experimentación se realizó en un HP Z230 Tower Workstation con procesador Intel(R) Xenon(R) CPU E3-1240 v3 y 3.40 GHz de memoria ram 16 GB y un sistema operativo de 64 bits con Windows 7 Home Premium.
 
-Se simulan caminatas de una partícula a través de $8$ dimensiones, con un largo de pasos en las caminatas de $p \in \{50,80,150,200,400\}$ y una repetición de $\{100, 300\}$. La cantidad de dimensión para la tarea original se mantienen como se mencionó anteriormente para la práctica original, ya que para los retos se aumenta hasta $10$ dimensiones con el fin de observar si existe algun cambio significativo en los tiempos de ejecución, así como se aumentaron la cantidad de pasos, ya que los mismos parámetros para la práctica original no causaban efecto significativo en los tiempos de ejecución, los pasos que se usaron para los retos fueron $p \in \{500,800,2000,10000\}$, las cantidad de repeticiones se mantuvieron en $100$ para ambos retos.
+Se simulan caminatas de una partícula a través de $8$ dimensiones, con un largo de pasos en las caminatas de $p \in \{50,80,150,200,400\}$ y una repetición de $\{100, 300\}$. La cantidad de pasos se aumentó con el fin de observar cambios en los tiempos de ejecución ya que los mismos parámetros para la práctica original no causaban efecto significativo, los pasos que se usaron para los retos fueron $p \in \{500,800,2000,10000\}$, las cantidad de repeticiones se mantuvieron en $100$ para ambos retos.
 
 \section{Modificaciones del código}
 Se agregaron para la práctica un ciclo \texttt{for} que nos ayudara a variar de forma automática la cantidad de pasos que realiza en cada caminata, así mismo fue agregado un \texttt{vector} el cual guarda las cantidades a variar. Para generar las imágenes fue necesario incluir la librería \texttt{ggplot}.
@@ -57,12 +57,12 @@ En la figura \ref{fig:PorcentajesEu} se puede observar que la cantidad de veces 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{PorcentajesEu}
-\caption{Porcentaje de llegada al origen referente a la cantidad de dimenciones de movimiento de la partícula.}
+\caption{Porcentaje de llegada al origen referente a la cantidad de dimensiones de movimiento de la partícula.}
 \label{fig:PorcentajesEu}
 \end{figure}
 
 De igual forma al aumentar la cantidad de repeticiones en la experimentación los gráficos muestran un comportamiento prácticamente idéntico, es decir es muy evidente en la figura \ref{fig:PorcentajesEu300} observar que el número de repeticiones no tienen un efecto significativo en la experimentación, así como es evidente que el factor que más aumenta la probabilidad de regresar al origen al estar en una sola dimensión.
-\begin{figure}
+\begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{PorcentajesEu300}
 \caption{Cantidad de veces que la partícula llegó al origen con 300 repeticiones.}
@@ -75,13 +75,12 @@ El reto uno consiste en medir los tiempos de ejecución de las caminatas variand
 \section{Modificación del código y parámetros de R1}
 Fue necesario agregar las funciones que te ayudan a medir el tiempo de ejecución así como agregar el comando que te permite observar dichos tiempos en segundos. Se agregaron los gráficos de los tiempos, así comopara que variaran por largo de caminata y por dimensión.
 \begin{lstlisting}[frame=single]
-     c <- Sys.time()
-      d <- Sys.time()
-      ti <- c(c,d)
-      tie <- diff(ti,units="secs")
-      todo <- c(duracion,dimension,mayor,tie)
+c <- Sys.time()
+d <- Sys.time()
+ti <- c(c,d)
+tie <- diff(ti,units="secs")
+todo <- c(duracion,dimension,mayor,tie)
       ....
-###Largo de la caminata##
 png(paste("LargoEu.png", sep=""), width=700, height=700)
 ggplot(data=graficas,aes(x=Pasos,y=Tiempo,fill=Dimension))+
 geom_boxplot()+xlab("Largo de la Caminata")+
@@ -89,12 +88,58 @@ ylab("Tiempo de ejecuci\u{F3}n (s)")
 graphics.off()
 \end{lstlisting}
 \section{Resultados y conclusiones de R1}
+Acorde a las figuras \ref{fig:LargoEu} y \ref{fig:LargoMa}, no existe duda que en los tiempos de ejecución de las caminatas con $10000$ pasos existe una diferencia significativa de pasos, es decir, acorde al incremento de pasos es de igual forma en tiempos sin inmportar la forma de medición de los pasos.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{LargoEu}
+\caption{Tiempos de ejecución respecto a la cantidad de pasos realizados en la caminata, con medición de forma Euclideana.}
+\label{fig:LargoEu}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{LargoMa}
+\caption{Tiempos de ejecución respecto a la cantidad de pasos realizados en la caminata, con medición de forma Manhattan.}
+\label{fig:LargoMa}
+\end{figure}
+
+Lo interesante es al observar los cambios de núcleos, ya que no es tan evidente si existe un cambio significativo respecto a ellos, como se podrá observar en la figura \ref{fig:DimEu} y en la figura  es muy difícil a simple vista diferenciar si existe una diferencia significativa de ellos, tras una prueba, se llega a la conclusión que no existe diferencia significativa en las medias, por tanto se podría decir que los tiempos de ejecución respecto a las diferentes dimensiones no es significativo, para ambas formas de medición.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{DimEu}
+\caption{Tiempos de ejecución con respecto a las dimensiones de las caminatas en forma de medición Euclideana.}
+\label{fig:DimEu}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{DimMa}
+\caption{Tiempos de ejecución con respecto a las dimensiones de las caminatas en forma de medición Manhattan.}
+\label{fig:DimMa}
+\end{figure}
+
 
 \section{Reto 2}
-
+El reto dos consiste en correr la experimentación ahora sin aplicar la paralelización, esto con el fin de comenzar a hacer conciencia en que casos la paralelización de algún código será necesaria, y que existen casos que no lo será, depende de el tipo de acciones que se realicen.
 
 \section{Modificación de código y parámetros R2}
-
+En este reto, más que agregar se tuvo que quitar los comandos, así como la librería de la paralelización.
 \section{Resultados y conclusiones de R2}
+Observemos que los tiempos de ejecución varían en el codigo paralelizado contra el que no lo está, observemos que en ambos casos, tanto en la forma de medición Euclideana en la figura \ref{fig:LargoR2Eu}, así como en la forma Manhattan en la figura \ref{fig:LargoR2Ma}, se observa que es más conveniente ejecutar el código paralelizado, pero lo que es interesante ver es el comportamiento de la medición Manhattan, sin duda tiene una variación muy notoria, así como 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{LargoR2Eu}
+\caption{Tiempos de ejecución de código paralelo contra secuancial, con medida Euclideana, variando los largos de las caminatas.}
+\label{fig:LargoR2Eu}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{LargoR2Ma}
+\caption{Tiempos de ejecución de código paralelo contra secuancial, con medida Manhattan, variando los largos de las caminatas.}
+\label{fig:LargoR2Ma}
+\end{figure}
+
+Para esta práctica está claro que es conveniente la paralelización, para cualquiera de las dos formas de medición, así como sin importar lo largo de la caminata.
 
 \end{document}

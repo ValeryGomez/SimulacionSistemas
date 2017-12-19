@@ -64,9 +64,9 @@ if (eucl) {
   graphics.off()
   #Dimensi??n de la caminata##
   png(paste("DimEuN.png", sep=""), width=700, height=700)
-  ggplot(data=datos,aes(x=Dimension,y=Tiempo,fill=Pasos))+geom_boxplot()+xlab("Dimensi\u{F3}n")+ ylab("Tiempo de ejecuci\u{F3}n (s)")
+  ggplot(data=datos,aes(x=Dimension,y=Tiempo))+geom_boxplot()+xlab("Dimensi\u{F3}n")+ ylab("Tiempo de ejecuci\u{F3}n (s)")
   graphics.off()
-  
+  write.csv(datos,file = "datosTiemposNoParEu.csv")
 } else {
   png(paste("TiemposMaN.png", sep=""), width=700, height=700)
   ggplot(data=datos,aes(x=Dimension,y=Tiempo,fill=Pasos))+geom_boxplot()+xlab("Dimensi\u{F3}n (100 Rep)")+ ylab("Tiempo de ejecuci\u{F3}n (s)")
@@ -77,7 +77,8 @@ if (eucl) {
   graphics.off()
   #Dimensi??n de la caminata##
   png(paste("DimMaN.png", sep=""), width=700, height=700)
-  ggplot(data=datos,aes(x=Dimension,y=Tiempo,fill=Pasos))+geom_boxplot()+xlab("Dimensi\u{F3}n")+ ylab("Tiempo de ejecuci\u{F3}n (s)")
+  ggplot(data=datos,aes(x=Dimension,y=Tiempo))+geom_boxplot()+xlab("Dimensi\u{F3}n")+ ylab("Tiempo de ejecuci\u{F3}n (s)")
   graphics.off()
+  write.csv(datos,file = "datosTiemposNoParMa.csv")
+  
 }
-write.csv(datos,file = "datosTiemposNoPar.csv")

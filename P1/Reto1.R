@@ -1,5 +1,5 @@
 repetir <- 100
-dd <- c(50,80,150,200)
+dd <- c(500,800,2000,10000)
 eucl <- TRUE
 dimm <- 8
 library(parallel)
@@ -72,10 +72,6 @@ graficas$Pasos <- as.factor(graficas$Pasos)
 graficas$Dimension <- as.factor(graficas$Dimension)
 
 if (eucl) {
-  #  png("p1er.png")
-  #  boxplot(data.matrix(graficas), use.cols=FALSE, 
-  #          xlab="Dimensi\u{F3}n", ylab="Distancia m\u{E1}xima", 
-  #          main="Euclideana")
   png(paste("TiemposEu.png", sep=""), width=700, height=700)
   ggplot(data=graficas,aes(x=Dimension,y=Tiempo,fill=Pasos))+geom_boxplot()+xlab("Dimensi\u{F3}n (100 Rep)")+ ylab("Tiempo de ejecuci\u{F3}n (s)")
   graphics.off()
@@ -85,17 +81,22 @@ if (eucl) {
   graphics.off()
   #Dimensi??n de la caminata##
   png(paste("DimEu.png", sep=""), width=700, height=700)
-  ggplot(data=graficas,aes(x=Dimension,y=Tiempo,fill=Pasos))+geom_boxplot()+xlab("Dimensi\u{F3}n")+ ylab("Tiempo de ejecuci\u{F3}n (s)")
+  ggplot(data=graficas,aes(x=Dimension,y=Tiempo))+geom_boxplot()+xlab("Dimensi\u{F3}n")+ ylab("Tiempo de ejecuci\u{F3}n (s)")
   graphics.off()
-  
+  write.csv(graficas,file = "datosTiemposParEu.csv")
   
 } else {
-  #  png("p1mr.png")
-  #  boxplot(data.matrix(graficas), use.cols=FALSE, 
-  #          xlab="Dimensi\u{F3}n", ylab="Distancia m\u{E1}xima", 
-  #          main="Manhattan")
   png(paste("TiemposMa.png", sep=""), width=700, height=700)
   ggplot(data=graficas,aes(x=Dimension,y=Tiempo,fill=Pasos))+geom_boxplot()+xlab("Dimensi\u{F3}n (100 Rep)")+ ylab("Tiempo de ejecuci\u{F3}n (s)")
   graphics.off()
+  ###Largo de la caminata##
+  png(paste("LargoMa.png", sep=""), width=700, height=700)
+  ggplot(data=graficas,aes(x=Pasos,y=Tiempo,fill=Dimension))+geom_boxplot()+xlab("Largo de la Caminata")+ ylab("Tiempo de ejecuci\u{F3}n (s)")
+  graphics.off()
+  #Dimensi??n de la caminata##
+  png(paste("DimMa.png", sep=""), width=700, height=700)
+  ggplot(data=graficas,aes(x=Dimension,y=Tiempo))+geom_boxplot()+xlab("Dimensi\u{F3}n")+ ylab("Tiempo de ejecuci\u{F3}n (s)")
+  graphics.off()
+  write.csv(graficas,file = "datosTiemposParMa.csv")
+  
 }
-write.csv(graficas,file = "datosTiemposPar.csv")

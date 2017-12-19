@@ -200,4 +200,4 @@ graphics.off()
 datos$Malla<- as.numeric(datos$Malla)
 shapiro.test(datos$as.numeric(Malla))
 wilcox.test(datos$Malla[datos$Semillas=="40"],datos$Malla[datos$Semillas=="Normal"] )
-median(datos$Malla[datos$Semillas]
+median(datos$Malla[datos$Semillas])
